@@ -1,56 +1,25 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 import rospy
 from playsound import playsound
-from std_msgs.msg import Int32
-#import multiprocessing
+from std_msgs.msg import Int32MultiArray
 
-
-def back():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/back.wav")
-        #p=multiprocessing.Process(target=playsound, args=("/home/ubuntu/catkin_ws/src/mysound/soundfile/back.wav"))
-        #p.start()
-        #input("press Enter to stop")
-        #p.terminate()
-
-def left():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/left.wav")
-
-def leftback():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/leftback.wav")
-
-def right():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/right.wav")
-
-def rightback():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/rightback.wav")
+SOUNDFILE = "/home/ubuntu/catkin_ws/src/mysound/soundfile/"
+FILENAME = ("left.wav", "leftback.wav", "back.wav", "rightback.wav", "right.wav")
 
 def direction_callback(data):
-                #keyboard ja apan cham go
-                # (4:left), (1:leftback), (2:back), (6:right), (3:rightback)
-                if(data.data == 4):
-                        left()
-                        rospy.loginfo("left sound is activated")
-                elif(data.data == 1):
-                        leftback()
-                        rospy.loginfo("leftback sound is activated")
-                elif(data.data == 2):
-                        back()
-                        rospy.loginfo("back sound is activated")
-                elif(data.data == 6):
-                        right()
-                        rospy.loginfo("right sound is activated")
-                elif(data.data == 3):
-                        rightback()
-                        rospy.loginfo("rightback sound is activated")
+        for i in range(5):
+                if data.data[i] > 0:
+                        tmp = SOUNDFILE+FILENAME[i]
+                        playsound(tmp)
+                        tmp = FILENAME[i] + " sound is activated, dist :"
+                        rospy.loginfo(tmp)
+                        print(data.data[i])
 
 def main():
         rospy.init_node('mysound', anonymous=True)
-        rospy.loginfo("sound module is actived")
-        sub = rospy.Subscriber('direction', Int32, direction_callback)
+        sub = rospy.Subscriber('direction', Int32MultiArray, direction_callback)
         rospy.spin()
-
 
 if __name__ == '__main__':
         try:
