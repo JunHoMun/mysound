@@ -4,18 +4,13 @@
 import rospy
 from playsound import playsound
 from std_msgs.msg import Int32
-#import multiprocessing
 
 
 def back():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/back.wav")
-        #p=multiprocessing.Process(target=playsound, args=("/home/ubuntu/catkin_ws/src/mysound/soundfile/back.wav"))
-        #p.start()
-        #input("press Enter to stop")
-        #p.terminate()
+        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/sound_each/dir/back.wav")
 
 def left():
-        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/left.wav")
+        playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/sound_each/dir/backleft.wav")
 
 def leftback():
         playsound("/home/ubuntu/catkin_ws/src/mysound/soundfile/leftback.wav")
@@ -44,6 +39,7 @@ def direction_callback(data):
                 elif(data.data == 3):
                         rightback()
                         rospy.loginfo("rightback sound is activated")
+
 
 def main():
         rospy.init_node('mysound', anonymous=True)
